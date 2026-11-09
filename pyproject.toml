@@ -1,0 +1,6 @@
+[project]
+name = "magik-ressources-monitor"
+version = "1.0.0"
+description = "Demand-driven CPU, RAM and NVIDIA monitoring for ComfyUI"
+license = {file = "LICENSE"}
+dependencies = ["psutil>=5.9", "nvidia-ml-py"]
