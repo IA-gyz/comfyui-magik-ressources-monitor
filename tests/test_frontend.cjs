@@ -26,4 +26,7 @@ assert.equal(vm.runInContext("shortModel('NVIDIA GeForce RTX 4070 Ti Super')",co
 assert.equal(vm.runInContext("shortModel('NVIDIA RTX 4070 TI SUPER')",context),'4070TIS');
 assert.equal(vm.runInContext("shortModel('NVIDIA GeForce GTX 1080 Ti')",context),'1080TI');
 assert.equal(vm.runInContext("shortModel('AMD Radeon RX 7900 XTX')",context),'7900XTX');
-console.log('Frontend unit checks passed: isolated peaks, unavailable state, recovery, GPU model labels.');
+assert.equal(vm.runInContext("clampSize(10,500).join(',')",context),'16,240');
+assert.equal(vm.runInContext("clampSize(72.4,36.6).join(',')",context),'72,37');
+assert.equal(vm.runInContext("clampSize(100,50).join(',')",context),'100,50');
+console.log('Frontend unit checks passed: isolated peaks, unavailable state, recovery, GPU model labels, resize clamping.');
