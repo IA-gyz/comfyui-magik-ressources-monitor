@@ -13,13 +13,13 @@ Disable/remove the old Crystools MonitorOnly extension if you want to replace it
 
 ## Controls
 
-- The monitor defaults to a movable floating panel. Drag its header; its position is saved in the browser. Top/Bottom placement uses the existing menu container, following the menu's location. Legacy placement uses the old queue menu. If a target is unavailable the panel floats.
-- Toggle individual measurements, or individual GPU sensors in Settings.
+- The monitor defaults to a movable floating panel. Drag the panel itself; its position is saved in the browser. Top/Bottom placement uses the existing menu container, following the menu's location. Legacy placement uses the old queue menu. If a target is unavailable the panel floats.
+- Toggle individual measurements, or individual GPU sensors in Settings. GPU cards show the GPU number alongside a short model name derived from the device name (for example `3090` for an RTX 3090, `4070TIS` for a 4070 Ti Super).
 - Refresh is **seconds between updates**: `0.25` means four times per second, `2` means once every two seconds. `0` pauses. The backend accepts intervals of 0.25–60 seconds; pause is handled locally without requests.
 - Hidden tabs stop polling. Each tab has independent settings; no global settings are mutated by a browser.
 - Width, height, animation and numbers-only settings apply to every placement mode.
-- Enable filesystem capacity and choose a mount in the panel's selector. Disk capacity is refreshed approximately every 15 seconds on demand. An unavailable/slow mount does not block CPU/GPU sampling.
-- Hover readings for exact used/total memory and observed peaks. Reset peaks clears only this browser session. Peaks are independent for RAM, every GPU and every disk. They represent sampled peaks, not every transient allocation.
+- Enable filesystem capacity and enter the mount point in Settings. Disk capacity is refreshed approximately every 15 seconds on demand. An unavailable/slow mount does not block CPU/GPU sampling.
+- Hover readings for exact used/total memory and observed peaks. Peaks are kept for this browser session only and are independent for RAM, every GPU and every disk. They represent sampled peaks, not every transient allocation.
 
 ## Reliability and design
 

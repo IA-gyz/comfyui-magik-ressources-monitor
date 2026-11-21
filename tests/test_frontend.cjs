@@ -21,4 +21,9 @@ assert.equal(vm.runInContext("cards.get('vram:0').fill.style.transform",context)
 vm.runInContext("update('vram:0','VRAM','blue',50,'%',{used:12,total:24})",context);
 assert.equal(vm.runInContext("cards.get('vram:0').value.textContent",context),'50%');
 assert.equal(vm.runInContext("peaks.get('vram:0').used",context),12);
-console.log('Frontend unit checks passed: isolated peaks, unavailable state, recovery.');
+assert.equal(vm.runInContext("shortModel('NVIDIA GeForce RTX 3090')",context),'3090');
+assert.equal(vm.runInContext("shortModel('NVIDIA GeForce RTX 4070 Ti Super')",context),'4070TIS');
+assert.equal(vm.runInContext("shortModel('NVIDIA RTX 4070 TI SUPER')",context),'4070TIS');
+assert.equal(vm.runInContext("shortModel('NVIDIA GeForce GTX 1080 Ti')",context),'1080TI');
+assert.equal(vm.runInContext("shortModel('AMD Radeon RX 7900 XTX')",context),'7900XTX');
+console.log('Frontend unit checks passed: isolated peaks, unavailable state, recovery, GPU model labels.');
