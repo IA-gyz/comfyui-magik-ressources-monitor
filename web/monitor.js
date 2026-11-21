@@ -22,6 +22,7 @@ const shortModel = name => String(name || '')
   .replace(/\s+/g, '')
   .toUpperCase()
   .slice(0, 12);
+const clampSize=(w,h)=>[Math.max(16,Math.min(240,Math.round(w))),Math.max(16,Math.min(240,Math.round(h)))];
 function invalidate(text) {
   for (const card of cards.values()) {
     card.value.textContent = '—';
@@ -168,11 +169,19 @@ function createUI() {
   #magik-resources-monitor .mrm-value{position:absolute;right:4px;top:3px;font-weight:bold}
   #magik-resources-monitor .unavailable{opacity:.65}
   #magik-resources-monitor.numbers-only .mrm-fill{display:none}
+  #magik-resources-monitor .mrm-grip{position:absolute;width:12px;height:12px;z-index:2;touch-action:none;background:repeating-linear-gradient(135deg,transparent 0 3px,#52688088 3px 4px)}
+  #magik-resources-monitor .mrm-grip.nw{top:0;left:0;cursor:nwse-resize;border-top-left-radius:8px}
+  #magik-resources-monitor .mrm-grip.ne{top:0;right:0;cursor:nesw-resize;border-top-right-radius:8px}
+  #magik-resources-monitor .mrm-grip.sw{bottom:0;left:0;cursor:nesw-resize;border-bottom-left-radius:8px}
+  #magik-resources-monitor .mrm-grip.se{bottom:0;right:0;cursor:nwse-resize;border-bottom-right-radius:8px}
   `;
   document.head.append(style);
   root=document.createElement('section');root.id='magik-resources-monitor';root.setAttribute('aria-label','Magik Ressources Monitor');
   body=document.createElement('div');body.className='mrm-body';
-  root.append(body);document.body.append(root);
+  root.append(body);
+  const grips=[];
+  for(const [pos,dx,dy] of [['nw',-1,-1],['ne',1,-1],['sw',-1,1],['se',1,1]]) {const g=document.createElement('div');g.className=`mrm-grip ${pos}`;g.title='Drag to resize';g.dx=dx;g.dy=dy;grips.push(g);root.append(g);}
+  document.body.append(root);
   try {
     const pos=JSON.parse(localStorage.getItem(PREFIX+'Location')||'null');
     if(pos && Number.isFinite(pos.x) && Number.isFinite(pos.y)){root.style.left=`${Math.max(0,Math.min(pos.x,innerWidth-120))}px`;root.style.top=`${Math.max(0,Math.min(pos.y,innerHeight-60))}px`;root.style.right='auto';root.style.bottom='auto';}
@@ -182,6 +191,14 @@ function createUI() {
   root.addEventListener('pointermove',e=>{if(!drag)return;root.style.left=`${Math.max(0,Math.min(e.clientX-drag.x,innerWidth-root.offsetWidth))}px`;root.style.top=`${Math.max(0,Math.min(e.clientY-drag.y,innerHeight-root.offsetHeight))}px`;root.style.right='auto';root.style.bottom='auto';});
   const end=()=>{if(!drag)return;drag=null;const r=root.getBoundingClientRect();try{localStorage.setItem(PREFIX+'Location',JSON.stringify({x:r.x,y:r.y}));}catch{}};
   root.addEventListener('pointerup',end);root.addEventListener('pointercancel',end);
+  let size;
+  const sizeMove=e=>{if(!size)return;const [w,h]=clampSize(size.w+size.dx*(e.clientX-size.x),size.h+size.dy*(e.clientY-size.y));save('Width',w);save('Height',h);root.style.setProperty('--mrm-width',`${w}px`);root.style.setProperty('--mrm-height',`${h}px`);};
+  const sizeEnd=()=>{if(!size)return;size=null;try{app.ui.settings.setSettingValue(PREFIX+'Width',get('Width'));app.ui.settings.setSettingValue(PREFIX+'Height',get('Height'));}catch{}};
+  for(const g of grips) {
+    g.addEventListener('pointerdown',e=>{e.stopPropagation();size={x:e.clientX,y:e.clientY,w:get('Width'),h:get('Height'),dx:g.dx,dy:g.dy};g.setPointerCapture(e.pointerId);});
+    g.addEventListener('pointermove',sizeMove);
+    g.addEventListener('pointerup',sizeEnd);g.addEventListener('pointercancel',sizeEnd);
+  }
   document.addEventListener('visibilitychange',()=>{if(document.hidden){controller?.abort();clearTimeout(timer);}else{nextDue=0;schedule();}});
   const health=setInterval(()=>{
     if(get('Enabled') && get('Interval')>0 && !document.hidden && lastSuccess && performance.now()-lastSuccess>Math.max(6000,get('Interval')*2500)) {root.title='Stale · waiting for current readings';invalidate('Readings are stale');}

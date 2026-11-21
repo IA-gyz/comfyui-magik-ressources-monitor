@@ -13,7 +13,7 @@ Disable/remove the old Crystools MonitorOnly extension if you want to replace it
 
 ## Controls
 
-- The monitor defaults to a movable floating panel. Drag the panel itself; its position is saved in the browser. Top/Bottom placement uses the existing menu container, following the menu's location. Legacy placement uses the old queue menu. If a target is unavailable the panel floats.
+- The monitor defaults to a movable floating panel. Drag the panel itself to move it; its position is saved in the browser. Drag any corner of the panel to resize the bars; the content resizes immediately while dragging and the size is kept in the Width/Height settings. Top/Bottom placement uses the existing menu container, following the menu's location. Legacy placement uses the old queue menu. If a target is unavailable the panel floats.
 - Toggle individual measurements, or individual GPU sensors in Settings. GPU cards show the GPU number alongside a short model name derived from the device name (for example `3090` for an RTX 3090, `4070TIS` for a 4070 Ti Super).
 - Refresh is **seconds between updates**: `0.25` means four times per second, `2` means once every two seconds. `0` pauses. The backend accepts intervals of 0.25–60 seconds; pause is handled locally without requests.
 - Hidden tabs stop polling. Each tab has independent settings; no global settings are mutated by a browser.
